@@ -1,0 +1,30 @@
+org: YOUR_SERVERLESS_ORG
+app: YOUR_SERVERLESS_APP
+service: YOUR_SERVERLESS_SERVICE
+
+configValidationMode: error
+
+frameworkVersion: ">=2.24.0"
+
+provider:
+  name: aws
+  runtime: go1.x
+  environment:
+    APP_NAME: ${param:APP_NAME}
+    CONNECTION_STRING: ${param:CONNECTION_STRING}
+    CORS_METHODS: ${param:CORS_METHODS}
+    CORS_ORIGIN: ${param:CORS_ORIGIN}
+    HMAC_SECRET: ${param:HMAC_SECRET}
+    STAGE: ${param:STAGE}
+
+functions:
+  api:
+    handler: bin/main
+    package:
+      patterns:
+        - './bin/main'
+    events:
+      - http:
+          method: any
+          path: /{proxy+}
+          cors: true
